@@ -251,7 +251,7 @@ setup_hpc_user()
         mkdir -p $SHARE_HOME/$HPC_USER/.ssh
         
         # Configure public key auth for the HPC user
-        ssh-keygen -t rsa -f $SHARE_HOME/$HPC_USER/.ssh/id_rsa -q -P ""
+        ssh-keygen -t rsa -f $SHARE_HOME/$HPC_USER/.ssh/id_rsa -q -N ''
         cat $SHARE_HOME/$HPC_USER/.ssh/id_rsa.pub > $SHARE_HOME/$HPC_USER/.ssh/authorized_keys
 
         echo "Host *" > $SHARE_HOME/$HPC_USER/.ssh/config
