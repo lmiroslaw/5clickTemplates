@@ -57,6 +57,12 @@ is_master()
 #
 install_pkgs()
 {
+    # Disable tty requirement for sudo
+    sed -i 's/^Defaults[ ]*requiretty/# Defaults requiretty/g' /etc/sudoers
+    
+    sudo yum install -y kernel-headers --disableexcludes=all
+    sudo yum install -y kernel-devel --disableexcludes=all
+    
     yum -y install epel-release
     yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip
 }
@@ -242,7 +248,7 @@ setup_hpc_user()
     echo "$HPC_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
     
     # Disable tty requirement for sudo
-    sed -i 's/^Defaults[ ]*requiretty/# Defaults requiretty/g' /etc/sudoers
+    # sed -i 's/^Defaults[ ]*requiretty/# Defaults requiretty/g' /etc/sudoers
 
     if is_master; then
     
