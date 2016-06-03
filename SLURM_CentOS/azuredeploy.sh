@@ -64,7 +64,7 @@ install_pkgs()
     sudo yum install -y kernel-devel --disableexcludes=all
     
     yum -y install epel-release
-    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip
+    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils nfs-utils-lib rpcbind mdadm wget python-pip
 }
 
 # Partitions all data disks attached to the VM and creates
@@ -320,6 +320,10 @@ install_easybuild()
         echo "source /usr/share/lmod/6.0.15/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
     fi
 }
+install_pkgs_ansys()
+{
+    sudo yum -y install libXp xterm openmotif libstdc++ libstdc++-devel compat-libstdc++-33 compat-gcc-34 gtk2 xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-ISO8859-1-75dpi.noarch
+}
 
 install_pkgs
 setup_shares
@@ -328,3 +332,4 @@ install_munge
 install_slurm
 setup_env
 install_easybuild
+install_pkgs_ansys
