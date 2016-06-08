@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Display commands and their arguments as they are executed.
 set -x
 #set -xeuo pipefail
 
@@ -64,7 +65,7 @@ install_pkgs()
     yum install -y kernel-devel --disableexcludes=all
     
     yum -y install epel-release
-    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils nfs-utils-lib rpcbind mdadm wget python-pip
+    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils nfs-utils-lib rpcbind mdadm wget python-pip infiniband-diags
 }
 
 # Partitions all data disks attached to the VM and creates
@@ -322,7 +323,7 @@ install_easybuild()
 }
 install_pkgs_ansys()
 {
-    yum -y install libXp xterm openmotif libstdc++ libstdc++-devel compat-libstdc++-33 compat-gcc-34 gtk2 xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-ISO8859-1-75dpi.noarch
+    yum -y install libXp xterm openmotif libstdc++ libstdc++-devel compat-libstdc++-33 compat-gcc-34 gtk2 xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-ISO8859-1-75dpi.noarch 
 }
 
 install_pkgs
