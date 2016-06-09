@@ -164,6 +164,7 @@
     "OSDiskName": "osdisk",
     "publicIPAddressType": "Dynamic",
     "publicIPAddressName": "publicips",
+    "availSetName": "rdmaAvailSet",
     "masterVMName": "master",
     "workerVMName": "worker",
 	"armApiVersion": "2015-06-15",
@@ -193,6 +194,16 @@
     "storageAccountType": "Standard_LRS"
   },
   "resources": [
+	{
+    "type": "Microsoft.Compute/availabilitySets",
+    "name": "[variables('availSetName')]",
+    "apiVersion": "2015-06-15",
+    "location": "[resourceGroup().location]",
+    "properties": {
+      "platformFaultDomainCount": "3",
+      "platformUpdateDomainCount": "20"
+    }
+  },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('newStorageAccountName')]",
@@ -272,6 +283,9 @@
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
       "properties": {
+	"availabilitySet": {
+	    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
+	  },
         "hardwareProfile": {
           "vmSize": "[parameters('headNodeSize')]"
         },
@@ -548,6 +562,9 @@
         "count": "[parameters('workerNodeCount')]"
       },
       "properties": {
+	"availabilitySet": {
+	    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
+	  },
         "hardwareProfile": {
           "vmSize": "[parameters('workerNodeSize')]"
         },
