@@ -162,7 +162,7 @@
     "newStorageAccountName": "[concat('st', uniqueString(resourceGroup().id))]",
     "vmStorageAccountContainerName": "vhd",
     "OSDiskName": "osdisk",
-    "publicIPAddressType": "Dynamic",
+    "publicIPAddressType": "Static",
     "publicIPAddressName": "publicips",
     "availSetName": "rdmaAvailSet",
     "masterVMName": "master",
