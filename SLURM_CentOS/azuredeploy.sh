@@ -43,6 +43,8 @@ HPC_UID=7007
 HPC_GROUP=hpc
 HPC_GID=7007
 
+# LMOD
+LMOD_VERSION=6.3.4
 
 # Returns 0 if this node is the master node.
 #
@@ -318,7 +320,7 @@ install_easybuild()
         su - $HPC_USER -c "pip install --install-option --prefix=$EASYBUILD_HOME https://github.com/hpcugent/easybuild-framework/archive/easybuild-framework-v2.5.0.tar.gz"
 
         # Add Lmod to the HPC users path
-        echo 'export PATH=/usr/share/lmod/6.0.15/libexec:$PATH' >> $SHARE_HOME/$HPC_USER/.bashrc
+        echo 'export PATH=/usr/share/lmod/$LMOD_VERSION/libexec:$PATH' >> $SHARE_HOME/$HPC_USER/.bashrc
 
         # Setup Easybuild configuration and paths
         echo 'export PATH=$HOME/EasyBuild/bin:$PATH' >> $SHARE_HOME/$HPC_USER/.bashrc
@@ -327,7 +329,7 @@ install_easybuild()
         echo "export EASYBUILD_MODULES_TOOL=Lmod" >> $SHARE_HOME/$HPC_USER/.bashrc
         echo "export EASYBUILD_INSTALLPATH=$EASYBUILD_HOME" >> $SHARE_HOME/$HPC_USER/.bashrc
         echo "export EASYBUILD_DEBUG=1" >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "source /usr/share/lmod/6.0.15/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
+        echo "source /usr/share/lmod/$LMOD_VERSION/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
     fi
 }
 
