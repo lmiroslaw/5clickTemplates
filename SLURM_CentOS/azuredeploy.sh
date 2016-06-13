@@ -168,8 +168,8 @@ install_munge()
     chown munge:munge /etc/munge/munge.key
     chmod 0400 /etc/munge/munge.key
 
-    /etc/init.d/munge start
-
+    systemctl enable munge
+    systemctl start munge
     cd ..
 }
 
@@ -194,7 +194,15 @@ install_slurm_config()
         sed 's/__MASTER__/'"$MASTER_HOSTNAME"'/g' |
                 sed 's/__WORKER_HOSTNAME_PREFIX__/'"$WORKER_HOSTNAME_PREFIX"'/g' |
                 sed 's/__LAST_WORKER_INDEX__/'"$LAST_WORKER_INDEX"'/g' > $SLURM_CONF_DIR/slurm.conf
+
+	wget $TEMPLATE_BASE_URL/slurmctld.service
+	cp slurmctld.service /usr/lib/systemd/system/
+    else
+	wget $TEMPLATE_BASE_URL/slurmd.service
+	cp slurmd.service /usr/lib/systemd/system/
+
     fi
+    systemctl daemon-reload #reload daemon after installation of .service
 
     ln -s $SLURM_CONF_DIR/slurm.conf /etc/slurm/slurm.conf
 }
@@ -224,9 +232,11 @@ install_slurm()
     install_slurm_config
 
     if is_master; then
-        /usr/sbin/slurmctld -vvvv
+    	systemctl enable slurmctld
+	systemctl start slurmctld
     else
-        /usr/sbin/slurmd -vvvv
+    	systemctl enable slurmd
+	systemctl start slurmd
     fi
 
     cd ..
