@@ -11,5 +11,5 @@ setenv("MPI_ROOT", mpi_root)
 
 prepend_path('PATH', pathJoin(mpi_root,arch,"bin"))
 prepend_path('LD_LIBRARY_PATH', pathJoin(mpi_root, arch, "lib"))
-prepend_path('LD_LIBRARY_PATH', pathJoin(mpi_root, "mic", "lib"))i
-
+prepend_path('LD_LIBRARY_PATH', pathJoin(mpi_root, "mic", "lib"))
+ 

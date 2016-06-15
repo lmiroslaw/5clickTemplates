@@ -7,4 +7,4 @@ whatis("2016, Michael Pantic, IET, HSR, Rapperswil, Switzerland")
 setenv("I_MPI_FABRICS","shm:dapl")
 setenv("I_MPI_DAPL_PROVIDER","ofa-v2-ib0")
 setenv("I_MPI_DYNAMIC_CONNECTION","0")
-
+ 
