@@ -7,18 +7,29 @@
       "metadata": {
         "description": "Unique public dns prefix where the master node will be exposed"
       }
-    },    
+    },
     "image": {
       "type": "string",
       "defaultValue": "OpenLogic:CentOS-HPC:7.1",
       "allowedValues": [
         "OpenLogic:CentOS-HPC:7.1",
-		"OpenLogic:CentOS-HPC:6.5",
+        "OpenLogic:CentOS-HPC:6.5",
         "OpenLogic:CentOS:6.6",
         "OpenLogic:CentOS:7.0"
       ],
       "metadata": {
         "description": "OpenLogic CentOS version to use. CentOS-HPC includes RDMA drivers for compute-to-compute MPI InfiniBand on A8 and A9 VM sizes."
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [      
+        "2012-Datacenter",
+        "2012-R2-Datacenter"
+      ],
+      "metadata": {
+        "description": "The Windows version for the visualization node. This will pick a fully patched image of this given Windows version. Allowed values: 2012-Datacenter, 2012-R2-Datacenter."
       }
     },
     "adminUserName": {
@@ -52,17 +63,17 @@
         "Standard_A10",
         "Standard_A11",
         "Standard_D4",
-		"Standard_D13",
-		"Standard_D14",
+        "Standard_D13",
+        "Standard_D14",
         "Standard_DS4",
-		"Standard_DS13",
-		"Standard_DS14",
-		"Standard_G3",
-		"Standard_G4",
-		"Standard_G5",
-		"Standard_GS3",
-		"Standard_GS4",
-		"Standard_GS5"
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
       ],
       "metadata": {
         "description": "Size of the head node."
@@ -83,36 +94,36 @@
         "Standard_A9",
         "Standard_A10",
         "Standard_A11",
-		"Standard_D1",
-		"Standard_D2",
-		"Standard_D3",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
         "Standard_D4",
-		"Standard_D11",
-		"Standard_D12",
-		"Standard_D13",
-		"Standard_D14",
-		"Standard_DS1",
-		"Standard_DS2",
-		"Standard_DS3",
-		"Standard_DS4",
-		"Standard_D11",
-		"Standard_D12",
-		"Standard_D13",
-		"Standard_D14",
-		"Standard_DS11",
-		"Standard_DS12",
-		"Standard_DS13",
-		"Standard_DS14",
-		"Standard_G1",
-		"Standard_G2",
-		"Standard_G3",
-		"Standard_G4",
-		"Standard_G5",
-		"Standard_GS1",
-		"Standard_GS2",
-		"Standard_GS3",
-		"Standard_GS4",
-		"Standard_GS5"
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
       ],
       "metadata": {
         "description": "Size of the worker nodes."
@@ -125,6 +136,55 @@
         "description": "This template creates N worker node. Use workerNodeCount to specify that N."
       }
     },
+    "visNodeSize": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "allowedValues": [
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "Size of the visualization nodes."
+      }
+    },
+    "visNodeCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "This template creates N visualization node. Use visNodeCount to specify that N."
+      }
+    },
     "dataDiskSize": {
       "type": "int",
       "defaultValue": 128,
@@ -134,40 +194,44 @@
     }
   },
   "variables": {
-	"imageReference_OpenLogic:CentOS-HPC:7.1": {
-	      "publisher": "OpenLogic",
-	      "offer": "CentOS-HPC",
-	      "sku": "7.1",
-	      "version": "latest"
-	    },
-		"imageReference_OpenLogic:CentOS-HPC:6.5": {
-	      "publisher": "OpenLogic",
-	      "offer": "CentOS-HPC",
-	      "sku": "6.5",
-	      "version": "latest"
-	    },
-	    "imageReference_OpenLogic:CentOS:7.0": {
-	      "publisher": "OpenLogic",
-	      "offer": "CentOS",
-	      "sku": "7.0",
-	      "version": "latest"
-	    },
-	    "imageReference_OpenLogic:CentOS:6.6": {
-	      "publisher": "OpenLogic",
-	      "offer": "CentOS",
-	      "sku": "6.6",
-	      "version": "latest"
-	    },
+    "imageReference_OpenLogic:CentOS-HPC:7.1": {
+      "publisher": "OpenLogic",
+      "offer": "CentOS-HPC",
+      "sku": "7.1",
+      "version": "latest"
+    },
+    "imageReference_OpenLogic:CentOS-HPC:6.5": {
+      "publisher": "OpenLogic",
+      "offer": "CentOS-HPC",
+      "sku": "6.5",
+      "version": "latest"
+    },
+    "imageReference_OpenLogic:CentOS:7.0": {
+      "publisher": "OpenLogic",
+      "offer": "CentOS",
+      "sku": "7.0",
+      "version": "latest"
+    },
+    "imageReference_OpenLogic:CentOS:6.6": {
+      "publisher": "OpenLogic",
+      "offer": "CentOS",
+      "sku": "6.6",
+      "version": "latest"
+    },
     "imageReference": "[variables(concat('imageReference_',parameters('image')))]",
     "newStorageAccountName": "[concat('st', uniqueString(resourceGroup().id))]",
     "vmStorageAccountContainerName": "vhd",
     "OSDiskName": "osdisk",
     "publicIPAddressType": "Static",
-    "publicIPAddressName": "publicips",
+    "publicIPAddressName": "publicIP",
+    "publicIPAddressVisName": "publicVisIP",
     "availSetName": "rdmaAvailSet",
     "masterVMName": "master",
     "workerVMName": "worker",
-	"armApiVersion": "2015-06-15",
+    "visnodeVMName": "visnode",
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "armApiVersion": "2015-06-15",
     "nicName": "nic",
     "networkSettings": {
       "virtualNetworkName": "virtualnetwork",
@@ -204,6 +268,16 @@
       "platformUpdateDomainCount": "20"
     }
   },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('availSetName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "platformFaultDomainCount": "3",
+        "platformUpdateDomainCount": "20"
+      }
+    },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('newStorageAccountName')]",
@@ -247,8 +321,8 @@
       }
     },
     {
-      "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "[variables('armApiVersion')]",
       "name": "[variables('nicName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -274,8 +348,8 @@
       }
     },
     {
-      "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "[variables('armApiVersion')]",
       "name": "[variables('masterVMName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -283,9 +357,9 @@
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
       "properties": {
-	"availabilitySet": {
-	    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
-	  },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
+        },
         "hardwareProfile": {
           "vmSize": "[parameters('headNodeSize')]"
         },
@@ -310,7 +384,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 0,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk0.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk0.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -320,7 +394,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 1,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk1.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk1.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -330,7 +404,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 2,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk2.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk2.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -340,7 +414,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 3,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk3.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk3.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -350,7 +424,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 4,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk4.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk4.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -360,7 +434,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 5,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk5.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk5.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -370,7 +444,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 6,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk6.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk6.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -380,7 +454,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 7,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk7.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk7.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -390,7 +464,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 8,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk8.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk8.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -400,7 +474,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 9,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk9.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk9.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -410,7 +484,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 10,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk10.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk10.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -420,7 +494,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 11,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk11.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk11.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -430,7 +504,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 12,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk12.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk12.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -440,7 +514,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 13,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk13.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk13.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -450,7 +524,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 14,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk14.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk14.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -460,7 +534,7 @@
               "diskSizeGB": "[parameters('dataDiskSize')]",
               "lun": 15,
               "vhd": {
-                "Uri":  "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk15.vhd')]"
+                "Uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('masterVMName'),'-datadisk15.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty"
@@ -502,7 +576,7 @@
       "name": "[concat(variables('workerVMName'), copyindex(), '/Installation')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-	    "[concat('Microsoft.Compute/virtualMachines/', variables('masterVMName'),'/extensions/Installation')]",
+        "[concat('Microsoft.Compute/virtualMachines/', variables('masterVMName'),'/extensions/Installation')]",
         "[concat('Microsoft.Compute/virtualMachines/', variables('workerVMName'), copyindex())]"
       ],
       "copy": {
@@ -522,8 +596,8 @@
       }
     },
     {
-      "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "[variables('armApiVersion')]",
       "name": "[concat(variables('nicName'), 'worker', copyindex())]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -549,6 +623,7 @@
       }
     },
     {
+      "_comment": "Definition of the worker node VM",
       "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(variables('workerVMName'), copyindex())]",
@@ -562,9 +637,9 @@
         "count": "[parameters('workerNodeCount')]"
       },
       "properties": {
-	"availabilitySet": {
-	    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
-	  },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
+        },
         "hardwareProfile": {
           "vmSize": "[parameters('workerNodeSize')]"
         },
@@ -588,6 +663,100 @@
           "networkInterfaces": [
             {
               "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicName'), 'worker', copyindex()))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "_comment": "Fixed IP for the visualization nodes",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "[variables('armApiVersion')]",
+      "name": "[variables('publicIPAddressVisName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('dnsPrefix')]"
+        }
+      }
+    },
+    {
+      "_comment": "Network interface for the visualization nodes",
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "[variables('armApiVersion')]",
+      "name": "[concat(variables('nicName'), variables('visnodeVMName'), copyindex())]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName)]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressVisName'))]"
+      ],
+
+      "copy": {
+        "name": "foo",
+        "count": "[parameters('visNodeCount')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfigVis",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(variables('networkSettings').statics.workerRange.base, copyindex(variables('networkSettings').statics.workerRange.start))]",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressVisName'))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "Definition of the visualization node VM",
+      "apiVersion": "[variables('armApiVersion')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('visnodeVMName'), copyindex())]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), variables('visnodeVMName'), copyindex())]"
+      ],
+      "copy": {
+        "name": "foo",
+        "count": "[parameters('visNodeCount')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('visNodeSize')]"
+        },
+        "osProfile": {
+          "computername": "[concat(variables('visnodeVMName'), copyindex())]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('windowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),variables('visnodeVMName'),copyindex(),'.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicName'), variables('visnodeVMName'), copyindex()))]"
             }
           ]
         }
