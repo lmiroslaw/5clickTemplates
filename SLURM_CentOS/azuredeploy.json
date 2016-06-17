@@ -623,7 +623,6 @@
       }
     },
     {
-      "_comment": "Definition of the worker node VM",
       "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(variables('workerVMName'), copyindex())]",

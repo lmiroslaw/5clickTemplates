@@ -312,6 +312,7 @@ setup_env()
 install_lmod()
 {
     yum -y install Lmod python-devel python-pip gcc gcc-c++ patch unzip tcl tcl-devel libibverbs libibverbs-devel
+    echo "source /usr/share/lmod/lmod/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
  
     # copy default templates
     mkdir -p  /usr/share/modulefiles
