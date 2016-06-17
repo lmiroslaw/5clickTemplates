@@ -1,6 +1,6 @@
 -- Custom written Intel MPI module for use on MS Azure using CENTOS 7.2 template --
 
-prereq("impi")
+prereq("intel-mpi")
 whatis("LMOD LUA module file for Intel MPI using RDMA/Infiniband on MS Azure")
 whatis("2016, Michael Pantic, IET, HSR, Rapperswil, Switzerland")
 
