@@ -668,7 +668,6 @@
       }
     },
     {
-      "_comment": "Fixed IP for the visualization nodes",
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "[variables('armApiVersion')]",
       "name": "[variables('publicIPAddressVisName')]",
@@ -681,7 +680,6 @@
       }
     },
     {
-      "_comment": "Network interface for the visualization nodes",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "[variables('armApiVersion')]",
       "name": "[concat(variables('nicName'), variables('visnodeVMName'), copyindex())]",
@@ -714,7 +712,6 @@
       }
     },
     {
-      "_comment": "Definition of the visualization node VM",
       "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(variables('visnodeVMName'), copyindex())]",
