@@ -240,7 +240,7 @@
       "subnet": {
         "dse": {
           "name": "dse",
-          "prefix": "10.0.0.0/24",
+          "prefix": "10.0.0.0/16",
           "vnet": "virtualnetwork"
         }
       },
@@ -250,7 +250,7 @@
           "start": 5
         },
         "visnodeRange": {
-          "base": "10.0.0.100",
+          "base": "10.0.1.",
           "start": 5
         },
         "master": "10.0.0.254"
