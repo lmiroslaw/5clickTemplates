@@ -224,7 +224,8 @@
     "OSDiskName": "osdisk",
     "publicIPAddressType": "Static",
     "publicIPAddressName": "publicIP",
-    "publicIPAddressVisName": "publicVisIP",
+    "publicDNSMasterSuffix" : "master",
+    "publicDNSVisNodeSuffix": "vis",
     "availSetName": "rdmaAvailSet",
     "masterVMName": "master",
     "workerVMName": "worker",
@@ -246,6 +247,10 @@
       "statics": {
         "workerRange": {
           "base": "10.0.0.",
+          "start": 5
+        },
+        "visnodeRange": {
+          "base": "10.0.0.100",
           "start": 5
         },
         "master": "10.0.0.254"
@@ -301,12 +306,12 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "[variables('armApiVersion')]",
-      "name": "[variables('publicIPAddressName')]",
+      "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix'))]",
       "location": "[resourceGroup().location]",
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsPrefix')]"
+          "domainNameLabel": "[concat(parameters('dnsPrefix'),'-',variables('publicDNSMasterSuffix'))]"
         }
       }
     },
@@ -327,7 +332,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[variables('networkSettings').statics.master]",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix')))]"
               },
               "subnet": {
                 "id": "[variables('subnetRef')]"
@@ -660,12 +665,16 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "[variables('armApiVersion')]",
-      "name": "[variables('publicIPAddressVisName')]",
+      "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSVisNodeSuffix'),copyindex())]",
       "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "foo",
+        "count": "[parameters('visNodeCount')]"
+      },
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsPrefix')]"
+          "domainNameLabel": "[concat(parameters('dnsPrefix'),'-',variables('publicDNSVisNodeSuffix'),copyindex())]"
         }
       }
     },
@@ -676,7 +685,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName)]",
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressVisName'))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', concat(variables('publicIPAddressName'),'-',variables('publicDNSVisNodeSuffix'),copyindex()))]"
       ],
 
       "copy": {
@@ -689,9 +698,9 @@
             "name": "ipconfigVis",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[concat(variables('networkSettings').statics.workerRange.base, copyindex(variables('networkSettings').statics.workerRange.start))]",
+              "privateIPAddress": "[concat(variables('networkSettings').statics.visnodeRange.base, copyindex(variables('networkSettings').statics.visnodeRange.start))]",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressVisName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),'-',variables('publicDNSVisNodeSuffix'),copyindex()))]"
               },
               "subnet": {
                 "id": "[variables('subnetRef')]"
