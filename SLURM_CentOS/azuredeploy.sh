@@ -66,7 +66,7 @@ install_pkgs()
     sudo yum install -y kernel-devel --disableexcludes=all
     
     yum -y install epel-release
-    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip
+    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ g++ nfs-utils rpcbind mdadm wget python-pip bison flex subversion git mercurial
 }
 
 # Partitions all data disks attached to the VM and creates
