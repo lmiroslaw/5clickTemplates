@@ -314,7 +314,7 @@ install_lmod()
     yum -y install Lmod python-devel python-pip gcc gcc-c++ patch unzip tcl tcl-devel libibverbs libibverbs-devel
     echo "export MODULEPATH=\$MODULEPATH:$SHARE_DATA/lmod"
     echo "source /usr/share/lmod/lmod/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
- 
+    
     # copy default templates
     mkdir -p  $SHARE_DATA/lmod
 
@@ -324,7 +324,8 @@ install_lmod()
     wget $TEMPLATE_BASE_URL/lmod/intel-mpi-rdma.lua
     mv intel-mpi-rdma.lua $SHARE_DATA/lmod
 
-    
+    # set modules to the new path
+    module use $SHARE_DATA/lmod
 
    
 }
