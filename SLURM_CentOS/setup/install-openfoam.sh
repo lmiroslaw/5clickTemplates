@@ -6,7 +6,7 @@ FOAM_INSTALL_DIR="$SOFTWARE_DIR/foam"
 
 
 # check if /share/storage is mounted
-if mount | grep /mnt/md0 > /dev/null; then
+if mount | grep $STORAGE_DIR > /dev/null; then
     echo "Storage mounted..."
 else
         echo "Storage not mounted, please mount /share/storage!"
