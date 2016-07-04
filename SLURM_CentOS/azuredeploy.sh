@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Display commands and their arguments as they are executed.
 set -x
 #set -xeuo pipefail
 
@@ -44,6 +43,8 @@ HPC_UID=7007
 HPC_GROUP=hpc
 HPC_GID=7007
 
+# LMOD
+LMOD_VERSION=6.3.4
 
 # Returns 0 if this node is the master node.
 #
@@ -61,11 +62,11 @@ install_pkgs()
     # Disable tty requirement for sudo
     sed -i 's/^Defaults[ ]*requiretty/# Defaults requiretty/g' /etc/sudoers
     
-    yum install -y kernel-headers --disableexcludes=all
-    yum install -y kernel-devel --disableexcludes=all
+    sudo yum install -y kernel-headers --disableexcludes=all
+    sudo yum install -y kernel-devel --disableexcludes=all
     
     yum -y install epel-release
-    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils nfs-utils-lib rpcbind mdadm wget python-pip infiniband-diags
+    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip
 }
 
 # Partitions all data disks attached to the VM and creates
@@ -169,8 +170,8 @@ install_munge()
     chown munge:munge /etc/munge/munge.key
     chmod 0400 /etc/munge/munge.key
 
-    /etc/init.d/munge start
-
+    systemctl enable munge
+    systemctl start munge
     cd ..
 }
 
@@ -195,7 +196,15 @@ install_slurm_config()
         sed 's/__MASTER__/'"$MASTER_HOSTNAME"'/g' |
                 sed 's/__WORKER_HOSTNAME_PREFIX__/'"$WORKER_HOSTNAME_PREFIX"'/g' |
                 sed 's/__LAST_WORKER_INDEX__/'"$LAST_WORKER_INDEX"'/g' > $SLURM_CONF_DIR/slurm.conf
+
+	wget $TEMPLATE_BASE_URL/slurmctld.service
+	cp slurmctld.service /usr/lib/systemd/system/
+    else
+	wget $TEMPLATE_BASE_URL/slurmd.service
+	cp slurmd.service /usr/lib/systemd/system/
+
     fi
+    systemctl daemon-reload #reload daemon after installation of .service
 
     ln -s $SLURM_CONF_DIR/slurm.conf /etc/slurm/slurm.conf
 }
@@ -225,9 +234,11 @@ install_slurm()
     install_slurm_config
 
     if is_master; then
-        /usr/sbin/slurmctld -vvvv
+    	systemctl enable slurmctld
+	systemctl start slurmctld
     else
-        /usr/sbin/slurmd -vvvv
+    	systemctl enable slurmd
+	systemctl start slurmd
     fi
 
     cd ..
@@ -298,39 +309,56 @@ setup_env()
     echo "export I_MPI_DYNAMIC_CONNECTION=0" >> /etc/profile.d/mpi.sh
 }
 
-install_easybuild()
+install_lmod()
 {
     yum -y install Lmod python-devel python-pip gcc gcc-c++ patch unzip tcl tcl-devel libibverbs libibverbs-devel
-    pip install vsc-base
+    echo "export MODULEPATH=\$MODULEPATH:$SHARE_DATA/lmod"
+    echo "source /usr/share/lmod/lmod/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
+ 
+    # copy default templates
+    mkdir -p  $SHARE_DATA/lmod
 
-    EASYBUILD_HOME=$SHARE_HOME/$HPC_USER/EasyBuild
+    wget $TEMPLATE_BASE_URL/lmod/intel-mpi.lua
+    mv intel-mpi.lua $SHARE_DATA/lmod
 
-    if is_master; then
-        su - $HPC_USER -c "pip install --install-option --prefix=$EASYBUILD_HOME https://github.com/hpcugent/easybuild-framework/archive/easybuild-framework-v2.5.0.tar.gz"
+    wget $TEMPLATE_BASE_URL/lmod/intel-mpi-rdma.lua
+    mv intel-mpi-rdma.lua $SHARE_DATA/lmod
 
-        # Add Lmod to the HPC users path
-        echo 'export PATH=/usr/share/lmod/6.0.15/libexec:$PATH' >> $SHARE_HOME/$HPC_USER/.bashrc
+    
 
-        # Setup Easybuild configuration and paths
-        echo 'export PATH=$HOME/EasyBuild/bin:$PATH' >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo 'export PYTHONPATH=$HOME/EasyBuild/lib/python2.7/site-packages:$PYTHONPATH' >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "export MODULEPATH=$EASYBUILD_HOME/modules/all" >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "export EASYBUILD_MODULES_TOOL=Lmod" >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "export EASYBUILD_INSTALLPATH=$EASYBUILD_HOME" >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "export EASYBUILD_DEBUG=1" >> $SHARE_HOME/$HPC_USER/.bashrc
-        echo "source /usr/share/lmod/6.0.15/init/bash" >> $SHARE_HOME/$HPC_USER/.bashrc
-    fi
+   
 }
-install_pkgs_ansys()
+
+wait_for_master()
 {
-    yum -y install libXp xterm openmotif libstdc++ libstdc++-devel compat-libstdc++-33 compat-gcc-34 gtk2 xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-ISO8859-1-75dpi.noarch 
+	if ! is_master; then
+		while [ ! -e $SHARE_DATA/master.exit ]; do
+			# file does not exist yet, wait and retry
+			echo "Waiting for master to finish..."
+			sleep 10
+			mount -a
+			mount | grep "^master:$SHARE_DATA"
+		done
+			
+	else
+		echo "This is the master, proceed"
+	fi
 }
+
+signal_finish()
+{
+	if is_master; then
+		echo "Master setup finished" > $SHARE_DATA/master.exit
+	fi
+}
+
 
 install_pkgs
 setup_shares
+wait_for_master
 setup_hpc_user
 install_munge
 install_slurm
 setup_env
-install_easybuild
-install_pkgs_ansys
+install_lmod
+signal_finish

@@ -2,11 +2,11 @@
 
 Deploys a SLURM cluster with head node and n worker nodes.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2F5clickTemplates%2Fmaster%2FSLURM_CentOS%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichaelpantic%2F5clickTemplates%2Fmaster%2FSLURM_CentOS%2Fazuredeploy.json" target="_blank">
 
    <img alt="Deploy to Azure" src="http://azuredeploy.net/deploybutton.png"/>
 </a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2F5clickTemplates%2Fmaster%2Fslurm-on-sles12-hpc%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fmichaelpantic%2F5clickTemplates%2Fmaster%2Fslurm-on-sles12-hpc%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
@@ -86,3 +86,12 @@ Worker nodes support any VM size.
 To run MPI applications you'll need to use the A8/A9 instances which include InfiniBand and RDMA support.  We suggest using A8 for the head node and A9 instances for worker nodes.
 
 Currently RDMA only supports Intel MPI.  You can download the Intel pieces and get an evaluation license from https://software.intel.com/en-us/intel-mpi-library.
+
+
+# LMOD settings
+LMOD is used for loading / setting environment variables.
+As a default, the module files in /lmod are used. These files use the MPI version installed in the /opt/intel  directory. These files come with the used CentOS installation.
+
+In case the intel compiler is installed in /share/data/software/intel, the alternative lmod files in /lmod-compiler-inst can be used (maybe version needs to be adjusted).
+
+The LMOD files for user software (ANSYS, OpenFOAM, OpenFOAM libraries) are generated/copied when installing the respective software.
