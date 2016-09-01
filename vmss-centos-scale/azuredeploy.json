@@ -16,6 +16,13 @@
       },
       "maxValue": 100
     },
+    "vmSku": {
+      "type": "string",
+      "defaultValue": "A8",
+      "metadata": {
+        "description": "Size of VMs in the VM Scale Set."
+      }
+    },
     "dnsPrefix": {
       "type": "string",
       "metadata": {
@@ -345,6 +352,27 @@
             "name": "[variables('networkSettings').subnet.dse.name]",
             "properties": {
               "addressPrefix": "[variables('networkSettings').subnet.dse.prefix]"
+            }
+          }
+        ]
+      }
+    },
+     {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('virtualNetworkName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('subnetPrefix')]"
             }
           }
         ]
