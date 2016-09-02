@@ -204,9 +204,6 @@
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
     "ipConfigName": "[concat(variables('namingInfix'), 'ipconfig')]",
     "virtualNetworkName": "[concat(variables('namingInfix'), 'vnet')]",
-    "diagnosticsStorageAccountName": "[concat(variables('uniqueStringArray')[0], variables('newStorageAccountSuffix'))]",
-    "diagnosticsStorageAccountResourceGroup": "[resourceGroup().name]",
-    "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',variables('diagnosticsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName'))]",
     "wadlogs": "<WadCfg><DiagnosticMonitorConfiguration>",
     "wadperfcounters1": "<PerformanceCounters scheduledTransferPeriod=\"PT1M\"><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\AvailableMemory\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory available\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentAvailableMemory\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Mem. percent available\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\UsedMemory\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory used\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentUsedMemory\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Memory percentage\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentUsedByCache\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Mem. used by cache\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentIdleTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU idle time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentUserTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU user time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentProcessorTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU percentage guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentIOWaitTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU IO wait time\" locale=\"en-us\"/></PerformanceCounterConfiguration>",
     "wadperfcounters2": "<PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\BytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk total bytes\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\ReadBytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk read guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\WriteBytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk write guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\TransfersPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk transfers\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\ReadsPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk reads\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\WritesPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk writes\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageReadTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk read time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageWriteTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk write time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageTransferTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk transfer time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageDiskQueueLength\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"Disk queue length\" locale=\"en-us\"/></PerformanceCounterConfiguration></PerformanceCounters>",
@@ -217,11 +214,11 @@
     "newStorageAccountName": "[concat('st', uniqueString(resourceGroup().id))]",
     "vmStorageAccountContainerName": "vhd",
     "OSDiskName": "osdisk",
-    "publicIPAddressType": "Static",    
+    "publicIPAddressType": "Static",
     "publicDNSMasterSuffix": "master",
     "publicDNSVisNodeSuffix": "vis",
     "availSetName": "rdmaAvailSet",
-    "masterVMName": "master",    
+    "masterVMName": "master",
     "visnodeVMName": "visnode",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
@@ -257,14 +254,32 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('networkSettings').subnet.dse.name)]",
     "templateBaseUrl": "https://raw.githubusercontent.com/lmiroslaw/5clickTemplates/master/SLURM_CentOS/",
     "installationCLI": "[concat('bash azuredeploy.sh ', variables('masterVMName'), ' ', parameters('hpcUserName'), ' ', variables('templateBaseUrl'))]",
+    "diagnosticsStorageAccountName": "[concat(variables('uniqueStringArray')[0], variables('newStorageAccountSuffix'))]",
+    "diagnosticsStorageAccountResourceGroup": "[resourceGroup().name]",
+    "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',variables('diagnosticsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName'))]",
     "storageAccountType": "Standard_LRS"
   },
-  "resources": [    
+  "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('newStorageAccountName')]",
+      "comments": "Storage for the master VM",
       "apiVersion": "[variables('armApiVersion')]",
       "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(variables('uniqueStringArray')[copyIndex()], variables('newStorageAccountSuffix'))]",
+      "comments": "Storage for the VM scale set",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('storageApiVersion')]",
+      "copy": {
+        "name": "storageLoop",
+        "count": "[variables('saCount')]"
+      },
       "properties": {
         "accountType": "[variables('storageAccountType')]"
       }
@@ -273,7 +288,7 @@
       "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('networkSettings').virtualNetworkName]",
-      "comments":  "Virtual Network used by all VMs",
+      "comments": "Virtual Network used by all VMs",
       "location": "[resourceGroup().location]",
       "properties": {
         "addressSpace": {
@@ -290,7 +305,7 @@
           }
         ]
       }
-    },   
+    },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "IPLoadBalancer",
@@ -317,7 +332,7 @@
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "comments":  "Network interface for the master node",
+      "comments": "Network interface for the master node",
       "apiVersion": "[variables('armApiVersion')]",
       "name": "[variables('nicName')]",
       "location": "[resourceGroup().location]",
@@ -726,7 +741,7 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "comments":  "Public IP Adress of the visualization node",
+      "comments": "Public IP Adress of the visualization node",
       "apiVersion": "[variables('armApiVersion')]",
       "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSVisNodeSuffix'),copyindex())]",
       "location": "[resourceGroup().location]",
