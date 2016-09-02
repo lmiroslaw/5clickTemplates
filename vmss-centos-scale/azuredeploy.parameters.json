@@ -2,14 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmSku": {
-      "value": "Standard_A1"
-    },
     "vmssName": {
       "value": "GEN-UNIQUE-32"
     },
     "instanceCount": {
       "value": 5
+    },
+    "vmSku": {
+      "value": "Standard_A1"
+    },
+    "dnsPrefix": {
+      "value": ""
     },
     "adminUserName": {
       "value": "azureuser"
@@ -22,6 +25,12 @@
     },
     "headNodeSize": {
       "value": "Standard_A8"
+    },
+    "workerNodeSize": {
+      "value": "Standard_A9"
+    },
+    "workerNodeCount": {
+      "value": 2
     }
   }
 }
