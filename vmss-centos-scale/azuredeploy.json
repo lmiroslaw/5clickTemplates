@@ -287,6 +287,7 @@
     "computeApiVersion": "2016-03-30",
     "networkApiVersion": "2016-03-30",
     "storageApiVersion": "2015-06-15",
+    "nicNameVmss": "nicVmss",
     "nicName": "nic",
     "networkSettings": {
       "virtualNetworkName": "virtualnetwork",
@@ -357,7 +358,7 @@
         ]
       }
     },
-     {
+    {
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[resourceGroup().location]",
@@ -469,7 +470,7 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray')[3], variables('newStorageAccountSuffix'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray')[4], variables('newStorageAccountSuffix'))]",
         "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]" 
       ],
       "sku": {
         "name": "[parameters('vmSku')]",
@@ -495,7 +496,7 @@
               "caching": "ReadOnly",
               "createOption": "FromImage"
             },
-            "imageReference": "[variables('imageReference')]"
+            "imageReference": "[variables('imageReference')]"        
           },
           "osProfile": {
             "computerNamePrefix": "[variables('namingInfix')]",
@@ -505,7 +506,7 @@
           "networkProfile": {
             "networkInterfaceConfigurations": [
               {
-                "name": "[variables('nicName')]",
+                "name": "[variables('nicNameVmss')]",
                 "properties": {
                   "primary": "true",
                   "ipConfigurations": [
@@ -513,7 +514,7 @@
                       "name": "[variables('ipConfigName')]",
                       "properties": {
                         "subnet": {
-                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
+                          "id": "[variables('subnetRef')]"
                         },
                         "loadBalancerBackendAddressPools": [
                           {
@@ -551,6 +552,21 @@
                     "storageAccountEndPoint": "https://core.windows.net"
                   }
                 }
+              },
+              {
+                "name": "LinuxScript",
+                "properties": {
+                  "publisher": "Microsoft.OSTCExtensions",
+                  "type": "CustomScriptForLinux",
+                  "typeHandlerVersion": "1.3",
+                  "settings": {
+                    "fileUris": [
+                      "[concat(variables('templateBaseUrl'), 'azuredeploy.sh')]"
+                    ],
+                    "commandToExecute": "[variables('installationCLI')]"
+                  }
+                }
+
               }
             ]
           }
@@ -804,7 +820,7 @@
           "commandToExecute": "[variables('installationCLI')]"
         }
       }
-    },
+    },    
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "[variables('armApiVersion')]",
