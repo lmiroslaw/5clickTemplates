@@ -273,6 +273,7 @@
       "apiVersion": "[variables('armApiVersion')]",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('networkSettings').virtualNetworkName]",
+      "comments":  "Virtual Network used by all VMs",
       "location": "[resourceGroup().location]",
       "properties": {
         "addressSpace": {
@@ -289,31 +290,10 @@
           }
         ]
       }
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[variables('virtualNetworkName')]",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "[variables('networkApiVersion')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[variables('addressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[variables('subnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('subnetPrefix')]"
-            }
-          }
-        ]
-      }
-    },
+    },   
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
+      "name": "IPLoadBalancer",
       "location": "[resourceGroup().location]",
       "apiVersion": "[variables('networkApiVersion')]",
       "properties": {
@@ -325,8 +305,8 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
+      "name": "IP4master",
       "apiVersion": "[variables('armApiVersion')]",
-      "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix'))]",
       "location": "[resourceGroup().location]",
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
