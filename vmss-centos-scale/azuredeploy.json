@@ -381,6 +381,18 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('longNamingInfix')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "[variables('armApiVersion')]",
       "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix'))]",
       "location": "[resourceGroup().location]",
@@ -496,7 +508,7 @@
               "caching": "ReadOnly",
               "createOption": "FromImage"
             },
-            "imageReference": "[variables('imageReference')]"        
+            "imageReference": "[variables('imageReference')]"
           },
           "osProfile": {
             "computerNamePrefix": "[variables('namingInfix')]",
@@ -822,7 +834,7 @@
           "commandToExecute": "[variables('installationCLI')]"
         }
       }
-    },    
+    },
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "[variables('armApiVersion')]",
