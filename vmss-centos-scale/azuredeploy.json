@@ -458,9 +458,7 @@
                       "name": "[variables('ipConfigName')]",
                       "properties": {
                         "subnet": {
-                          "privateIPAllocationMethod": "Static",
-                          "privateIPAddress": "[concat(variables('networkSettings').statics.workerRange.base, copyindex(variables('networkSettings').statics.workerRange.start))]",
-                          "id": "[variables('subnetRef')]"
+                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName), '/subnets/', variables('networkSettings').subnet.dse.name))]"
                         },
                         "loadBalancerBackendAddressPools": [
                           {
