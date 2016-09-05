@@ -309,7 +309,8 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": [ "variables('publicIPAddressName')" ],
+      "name": "[variables('publicIPAddressName')]",
+      "comments": "Public IP for the load balancer",
       "location": "[resourceGroup().location]",
       "apiVersion": "[variables('networkApiVersion')]",
       "properties": {
@@ -338,7 +339,7 @@
       "name": "[variables('nicName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', 'IP4master')]",
+        "[concat('Microsoft.Network/publicIPAddresses/', concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName)]"
       ],
       "properties": {
