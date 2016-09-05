@@ -192,6 +192,7 @@
       "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '3')))]",
       "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '4')))]"
     ],
+    "vhdContainerName": "[concat(variables('namingInfix'), 'vhd')]",
     "loadBalancerName": "[concat(variables('namingInfix'), 'lb')]",
     "saCount": "[length(variables('uniqueStringArray'))]",
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
