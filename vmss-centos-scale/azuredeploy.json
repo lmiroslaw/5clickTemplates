@@ -526,10 +526,7 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
-      "properties": {
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availSetName'))]"
-        },
+      "properties": {        
         "hardwareProfile": {
           "vmSize": "[parameters('headNodeSize')]"
         },
