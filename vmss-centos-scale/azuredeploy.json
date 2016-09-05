@@ -458,7 +458,7 @@
                       "name": "[variables('ipConfigName')]",
                       "properties": {
                         "subnet": {
-                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName), '/subnets/', variables('networkSettings').subnet.dse.name))]"
+                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('networkSettings').virtualNetworkName, '/subnets/', variables('networkSettings').subnet.dse.name)]"
                         },
                         "loadBalancerBackendAddressPools": [
                           {
