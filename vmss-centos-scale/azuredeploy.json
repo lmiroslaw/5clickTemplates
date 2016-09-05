@@ -18,7 +18,7 @@
     },
     "vmSku": {
       "type": "string",
-      "defaultValue": "A8",
+      "defaultValue": "Standard_A8",
       "metadata": {
         "description": "Size of VMs in the VM Scale Set."
       }
@@ -99,7 +99,7 @@
       "metadata": {
         "description": "Size of the head node."
       }
-    },    
+    },
     "visNodeSize": {
       "type": "string",
       "defaultValue": "Standard_D13",
@@ -255,7 +255,7 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('networkSettings').virtualNetworkName)]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('networkSettings').subnet.dse.name)]",
     "templateBaseUrl": "https://raw.githubusercontent.com/lmiroslaw/5clickTemplates/master/SLURM_CentOS/",
-    "installationCLI": "[concat('bash azuredeploy.sh ', variables('masterVMName'), ' ', parameters('hpcUserName'), ' ', variables('templateBaseUrl'))]",
+    "installationCLI": "[concat('bash azuredeploy.sh ', variables('masterVMName'), ' ', variables('namingInfix'), ' ', parameters('instanceCount'), ' ', parameters('hpcUserName'), ' ', variables('templateBaseUrl'))]",
     "diagnosticsStorageAccountName": "[concat(variables('uniqueStringArray')[0], variables('newStorageAccountSuffix'))]",
     "diagnosticsStorageAccountResourceGroup": "[resourceGroup().name]",
     "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',variables('diagnosticsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName'))]",
@@ -526,7 +526,7 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
-      "properties": {        
+      "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('headNodeSize')]"
         },
