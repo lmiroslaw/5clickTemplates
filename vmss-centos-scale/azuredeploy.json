@@ -309,7 +309,7 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "IPLoadBalancer",
+      "name": [ "variables('publicIPAddressName')" ],
       "location": "[resourceGroup().location]",
       "apiVersion": "[variables('networkApiVersion')]",
       "properties": {
@@ -321,7 +321,7 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "IP4master",
+      "name": "[concat(variables('publicIPAddressName'),'-',variables('publicDNSMasterSuffix'))]",
       "apiVersion": "[variables('armApiVersion')]",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -366,7 +366,7 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "[variables('networkApiVersion')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', 'IPLoadBalancer')]"
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
       ],
       "properties": {
         "frontendIPConfigurations": [
