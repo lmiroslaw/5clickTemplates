@@ -2,6 +2,9 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "adminUserName": {
+      "value": "azureuser"
+    },
     "vmssName": {
       "value": "GEN-UNIQUE-32"
     },
@@ -13,9 +16,6 @@
     },
     "dnsPrefix": {
       "value": ""
-    },
-    "adminUserName": {
-      "value": "azureuser"
     },
     "adminPassword": {
       "value": "GEN-PASSWORD"
