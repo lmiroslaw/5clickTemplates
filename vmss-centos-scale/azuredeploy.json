@@ -277,6 +277,7 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "accountType": "[variables('storageAccountType')]"
+        }
       },
       {
         "type": "Microsoft.Storage/storageAccounts",
@@ -285,7 +286,8 @@
         "apiVersion": "[variables('armApiVersion')]",
         "location": "[resourceGroup().location]",
         "properties": {
-          "accountType": "[variables('storageAccountType')]"        
+          "accountType": "[variables('storageAccountType')]"
+        }   
       },
       {
         "type": "Microsoft.Storage/storageAccounts",
