@@ -309,6 +309,20 @@ setup_env()
     echo "export I_MPI_DYNAMIC_CONNECTION=0" >> /etc/profile.d/mpi.sh
 }
 
+# Open all the ports on computing nodes.
+# Open selected ports on the master node. 
+# 
+setup_connectivity() {
+    if is_master; then
+        sudo systemctl start firewalld
+        sudo firewall-cmd --add-ports=30000-65500/tcp --permanent
+        sudo firewall-cmd --add-ports=8171/tcp --permanent #ANSYS RSM
+        sudo firewall-cmd --add-ports=9171/tcp --permanent #ANSYS RSM 
+        sudo firewall-cmd --add-ports=1000-2000/tcp --permanent #ANSYS RSM
+    else 
+        sudo iptables -I INPUT -j ACCEPT
+}
+
 install_lmod()
 {
     yum -y install Lmod python-devel python-pip gcc gcc-c++ patch unzip tcl tcl-devel libibverbs libibverbs-devel
@@ -323,9 +337,6 @@ install_lmod()
 
     wget $TEMPLATE_BASE_URL/lmod/intel-mpi-rdma.lua
     mv intel-mpi-rdma.lua $SHARE_DATA/lmod
-
-    
-
    
 }
 
@@ -355,6 +366,7 @@ signal_finish()
 
 install_pkgs
 setup_shares
+setup_connectivity
 wait_for_master
 setup_hpc_user
 install_munge
