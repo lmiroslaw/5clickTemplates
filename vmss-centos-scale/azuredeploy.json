@@ -261,7 +261,7 @@
     },
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('networkSettings').virtualNetworkName)]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('networkSettings').subnet.dse.name)]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/lmiroslaw/5clickTemplates/master/SLURM_CentOS/",
+    "templateBaseUrl": "https://raw.githubusercontent.com/lmiroslaw/5clickTemplates/master/vmss-centos-scale/",
     "installationCLI": "[concat('bash azuredeploy.sh ', variables('masterVMName'), ' ', variables('namingInfix'), ' ', parameters('instanceCount'), ' ', parameters('hpcUserName'), ' ', variables('templateBaseUrl'))]",
     "diagnosticsStorageAccountName": "[concat(variables('uniqueStringArray')[0], variables('newStorageAccountSuffix'))]",
     "diagnosticsStorageAccountResourceGroup": "[resourceGroup().name]",
