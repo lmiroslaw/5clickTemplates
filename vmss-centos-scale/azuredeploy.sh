@@ -333,10 +333,10 @@ install_lmod()
     mkdir -p  $SHARE_DATA/lmod
 
     wget $TEMPLATE_BASE_URL/lmod/intel-mpi.lua
-    mv intel-mpi.lua $SHARE_DATA/lmod
+    sudo mv intel-mpi.lua $SHARE_DATA/lmod
 
     wget $TEMPLATE_BASE_URL/lmod/intel-mpi-rdma.lua
-    mv intel-mpi-rdma.lua $SHARE_DATA/lmod
+    sudo mv intel-mpi-rdma.lua $SHARE_DATA/lmod
    
 }
 
